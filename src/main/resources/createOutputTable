@@ -1,0 +1,8 @@
+CREATE TABLE `abdulqadir_ansari_java_output` (
+  `id` int NOT NULL,
+  `count` int NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `output` varchar(255) DEFAULT NULL,
+  `published_on` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)

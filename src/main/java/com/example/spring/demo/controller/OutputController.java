@@ -35,9 +35,10 @@ public class OutputController {
 
 	@PostMapping("/process_save_in_output")
 	public Output process(@RequestBody String inputStr) {
-		log.info("input_string: " + inputStr);
+		log.info("inputString: " + inputStr);
 		Output output = trimString.processData(inputStr);
-
+		log.info("rest outputStr: "+output.getOutput());
+		log.info("rest output Count: "+output.getCount());
 		return outputDAO.save(output);
 	}
 

@@ -11,54 +11,54 @@ import java.util.Date;
 public class TrimString {
     private static final Logger log = LogManager.getLogger(TrimString.class);
 
-
-    // Recursively removes adjacent
-    // duplicates from str and
-    // returns new string. las_removed
-    // is a pointer to
-    // last_removed character
-    public static String removeDuplicates(String s, char ch)
+    //static int count=0;
+    // removes adjacent similar characters
+    public static String removeAdjacentSimilarChar(String inputStr, char emptyChar, int count)
     {
 
-        // If length of string is 1 or 0
-        if (s == null || s.length() <= 1)
+        count++;
+        // if string is empty or contain only single char
+        if (inputStr == null || inputStr.length() <= 1)
         {
-            return s;
+            return inputStr;
         }
 
         int i = 0;
-        while (i < s.length())
+        while (i < inputStr.length())
         {
-            if (i < s.length()-1 && s.charAt(i) == s.charAt(i + 1))
+            //check 2 char if they are same
+            if (i < inputStr.length()-1 && inputStr.charAt(i) == inputStr.charAt(i + 1))
             {
+
                 int j = i;
-                while (j + 1 < s.length() && s.charAt(j) == s.charAt(j + 1))
+                //check if it is a pair of 2 or 3 or more
+                while (j + 1 < inputStr.length() && inputStr.charAt(j) == inputStr.charAt(j + 1))
                 {
                     j++;
                 }
-                char lastChar = i > 0 ? s.charAt(i - 1) : ch;
-
-                String remStr = removeDuplicates(s.substring(j + 1, s.length()), lastChar);
-
-                s = s.substring(0, i);
-                int k = s.length(), l = 0;
-
-                // Recursively remove all the adjacent
-                // characters formed by removing the
-                // adjacent characters
-                while (remStr.length() > 0 && s.length() > 0 && remStr.charAt(0) == s.charAt(s.length() - 1))
-                {
-
-                    // Have to check whether this is the
-                    // repeated character that matches the
-                    // last char of the parent String
-                    while (remStr.length() > 0 && remStr.charAt(0) != ch && remStr.charAt(0) == s.charAt(s.length() - 1))
-                    {
-                        remStr = remStr.substring(1, remStr.length());
-                    }
-                    s = s.substring(0, s.length() - 1);
+                //replace with empty char
+                char prvsChar;
+                if (i > 0){
+                    prvsChar = inputStr.charAt(i - 1);
+                } else {
+                    prvsChar = emptyChar;
                 }
-                s = s + remStr;
+
+                //remove initial chars which has been scanned and do recursive call
+                String remStr = removeAdjacentSimilarChar(inputStr.substring(j + 1), prvsChar, count);
+                inputStr = inputStr.substring(0, i);
+
+                // check and remove if any pair is formed again after removing pairs of adjacent charcter
+                while (remStr.length() > 0 && inputStr.length() > 0 && remStr.charAt(0) == inputStr.charAt(inputStr.length() - 1))
+                {
+                    // check  and compare with parent Strings last character
+                    while (remStr.length() > 0 && remStr.charAt(0) != emptyChar && remStr.charAt(0) == inputStr.charAt(inputStr.length() - 1))
+                    {
+                        remStr = remStr.substring(1);
+                    }
+                    inputStr = inputStr.substring(0, inputStr.length() - 1);
+                }
+                inputStr = inputStr + remStr;
                 i = j;
             }
             else
@@ -66,19 +66,16 @@ public class TrimString {
                 i++;
             }
         }
-        return s+"-"+i;
+
+        return inputStr+"-"+count;
     }
 
     public Output processData(String str){
-        String res = TrimString.removeDuplicates(str.replace(" ",""), ' ');
+        String res = TrimString.removeAdjacentSimilarChar(str.replace(" ",""), ' ', 0);
         String finalop = res.split("-")[0];
         String count = res.split("-")[1];
 
-        log.info("finalop: " + finalop);
-        log.info("count: " + count);
-
         Output output = new Output();
-
         output.setCount(Integer.parseInt(count));
         output.setName("AbdulQadir");
         output.setOutput(finalop);

@@ -31,9 +31,10 @@ public class Application implements CommandLineRunner{
 	public void run(String... args) {
 
 		for(Input input : inputController.getAllInput()) {
-			log.info("input_string: " + input.getInputString());
+			log.info("inputString: " + input.getInputString());
 			Output output = trimString.processData(input.getInputString());
-
+			log.info("output Str: "+output.getOutput());
+			log.info("output count: "+output.getCount());
 			outputController.save(output);
 		}
 
